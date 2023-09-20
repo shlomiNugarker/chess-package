@@ -1,0 +1,18 @@
+{
+  "name": "@shlomin1231/chess_lib",
+  "version": "1.0.0",
+  "description": "chess library",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chess"
+  ],
+  "author": "Shlomi Nugarker",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
