@@ -1,8 +1,15 @@
 {
-  "name": "@shlomin1231/chess_lib",
+  "name": "chess-game-js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shlomiNugarker/chess-package.git"
+  },
   "version": "1.0.0",
   "description": "chess library",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
