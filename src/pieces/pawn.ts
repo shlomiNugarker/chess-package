@@ -33,7 +33,7 @@ function getAllPossibleCoordsPawn(self: P | p) {
   const isWhite = self.game.isBlackPiece(self.name)
   const pieceCoord = self.coord
 
-  const res: { i: number; j: number }[] = []
+  const res: Coord[] = []
 
   // Regular steps
   let diff = isWhite ? -1 : 1
