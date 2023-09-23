@@ -1,9 +1,5 @@
-// import { chess as chessService } from './service'
-
 import { Board } from './Board'
 import { Coord } from './interfaces/Coord'
-
-// export const chess = chessService
 
 export class Game {
   isOnline: boolean
@@ -72,6 +68,23 @@ export class Game {
         return undefined
     }
   }
+
+  isOptionToCastling(pieceToCastling: any) {
+    if (!this.selectedCellCoord) return false
+
+    const currPiece =
+      this.board.board[this.selectedCellCoord.i][this.selectedCellCoord.j]
+
+    if (
+      (pieceToCastling.name === 'K' && currPiece?.name === 'R') ||
+      (pieceToCastling.name === 'R' && currPiece?.name === 'K') ||
+      (pieceToCastling.name === 'k' && currPiece?.name === 'r') ||
+      (pieceToCastling.name === 'r' && currPiece?.name === 'k')
+    ) {
+      return true
+    }
+    return false
+  }
 }
 
-const newGame = new Game(false)
+const newGame = new Game()
