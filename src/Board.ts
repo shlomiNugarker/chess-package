@@ -18,10 +18,10 @@ export class Board {
         let piece = null
         const position = { i, j }
         if (i === 1) {
-          this.board[i][j] = new p(position)
+          this.board[i][j] = new p(this.game, position)
         }
         if (i === 6) {
-          this.board[i][j] = new P(position)
+          this.board[i][j] = new P(this.game, position)
         }
         this.board[i][j] = piece
       }
