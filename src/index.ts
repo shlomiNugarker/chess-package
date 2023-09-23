@@ -1,5 +1,6 @@
 import { Board } from './Board'
 import { Coord } from './interfaces/Coord'
+import { P, p } from './pieces/pawn'
 
 export class Game {
   isOnline: boolean
@@ -68,7 +69,6 @@ export class Game {
         return undefined
     }
   }
-
   isOptionToCastling(pieceToCastling: any) {
     if (!this.selectedCellCoord) return false
 
@@ -80,6 +80,18 @@ export class Game {
       (pieceToCastling.name === 'R' && currPiece?.name === 'K') ||
       (pieceToCastling.name === 'k' && currPiece?.name === 'r') ||
       (pieceToCastling.name === 'r' && currPiece?.name === 'k')
+    ) {
+      return true
+    }
+    return false
+  }
+  isPawnStepsEnd(piece: P | p) {
+    if (piece?.name === 'p' && this.isBlackTurn && piece.coord.i === 7) {
+      return true
+    } else if (
+      piece?.name === 'P' &&
+      !this.isBlackTurn &&
+      piece.coord.i === 0
     ) {
       return true
     }
