@@ -40,7 +40,7 @@ export function getAllPossibleCoordsPawn(
 
   if (self) {
     const board = self.game.board.board
-    const isWhite = self.game.isBlackPiece(self.name)
+    const isWhite = self.game.isBlackPiece(self)
     const pieceCoord = self.coord
 
     // Regular steps

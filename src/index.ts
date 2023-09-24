@@ -52,14 +52,16 @@ export class Game {
     this.board = new Board(this)
     this.players = { white: 'userId_white', black: 'userId_black' }
   }
-  isEmptyCell(coord: { i: number; j: number }) {
+  isEmptyCell(coord: Coord) {
     return this.board.board[coord.i][coord.j] === null
   }
   isColorPieceWorthCurrPlayerColor(piece: any) {
     return this.isBlackTurn === this.isBlackPiece(piece.name)
   }
-  isBlackPiece(piece: any): boolean | undefined {
-    switch (piece.name) {
+  isBlackPiece(
+    piece: P | p | K | k | B | b | N | n | Q | q | R | r | null
+  ): boolean | undefined {
+    switch (piece?.name) {
       case 'K': // KING_WHITE
       case 'B': // BISHOP_WHITE
       case 'P': // PAWN_WHITE:
@@ -109,7 +111,7 @@ export class Game {
     return false
   }
   updateKingPos(
-    toCoord: { i: number; j: number },
+    toCoord: Coord,
     piece: P | p | K | k | B | b | N | n | Q | q | R | r | null
   ) {
     if (piece?.name === 'K') {
@@ -224,6 +226,8 @@ export class Game {
           : (this.isCastlingLegal.whiteRightSide = false)
       }
     }
+
+    this.selectedCellCoord = null
 
     return this
   }
@@ -625,5 +629,15 @@ export class Game {
   ) {
     this.board.board[coordsToFill.i][coordsToFill.j] = pieceToAdd
     return this
+  }
+  getBoard() {
+    const board: (string | null)[][] = []
+    for (let i = 0; i < this.board.board.length; i++) {
+      board[i] = []
+      for (let j = 0; j < this.board.board[i].length; j++) {
+        board[i][j] = this.board.board[i][j]?.shape || null
+      }
+    }
+    return board
   }
 }
