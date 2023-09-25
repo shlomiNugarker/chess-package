@@ -129,11 +129,11 @@ export class Game {
     return this
   }
   isValidMove(fromCoord: Coord, toCoord: Coord) {
-    console.log()
     const fromPiece = this.board.board[fromCoord.i][fromCoord.j]
     const possibleCoords = fromPiece?.getPossibleCoords()
 
     return (
+      this.isColorPieceWorthCurrPlayerColor(fromPiece) &&
       possibleCoords &&
       possibleCoords?.some(
         (coord) => coord.i === toCoord.i && coord.j === toCoord.j
