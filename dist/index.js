@@ -39,23 +39,23 @@ class Game {
         return this.board.board[coord.i][coord.j] === null;
     }
     isColorPieceWorthCurrPlayerColor(piece) {
-        return this.isBlackTurn === this.isBlackPiece(piece.name);
+        return this.isBlackTurn === this.isBlackPiece(piece);
     }
     isBlackPiece(piece) {
         switch (piece === null || piece === void 0 ? void 0 : piece.name) {
             case 'K': // KING_WHITE
             case 'B': // BISHOP_WHITE
-            case 'P': // PAWN_WHITE:
-            case 'Q': // QUEEN_WHITE:
-            case 'R': // ROOK_WHITE:
-            case 'N': // KNIGHT_WHITE:
+            case 'P': // PAWN_WHITE
+            case 'Q': // QUEEN_WHITE
+            case 'R': // ROOK_WHITE
+            case 'N': // KNIGHT_WHITE
                 return false;
-            case 'k': // KING_BLACK:
-            case 'b': // BISHOP_BLACK:
-            case 'p': //PAWN_BLACK:
-            case 'q': //  QUEEN_BLACK:
-            case 'r': // ROOK_BLACK:
-            case 'n': // KNIGHT_BLACK:
+            case 'k': // KING_BLACK
+            case 'b': // BISHOP_BLACK
+            case 'p': //PAWN_BLACK
+            case 'q': //  QUEEN_BLACK
+            case 'r': // ROOK_BLACK
+            case 'n': // KNIGHT_BLACK
                 return true;
             default:
                 return undefined;
@@ -112,7 +112,8 @@ class Game {
             this.eatableCellAfterTwoStepsPawnBlack.j === toCoord.j) {
             const piece = this.board.board[this.eatableCellAfterTwoStepsPawnBlack.i][this.eatableCellAfterTwoStepsPawnBlack.j];
             this.board.board[this.eatableCellAfterTwoStepsPawnBlack.i][this.eatableCellAfterTwoStepsPawnBlack.j] = null;
-            this.eatenPieces.white.push(piece);
+            if (piece)
+                this.eatenPieces.white.push(piece);
         }
         if (this.isBlackTurn &&
             this.eatableCellAfterTwoStepsPawnWhite &&
@@ -120,7 +121,8 @@ class Game {
             this.eatableCellAfterTwoStepsPawnWhite.j === toCoord.j) {
             const piece = this.board.board[this.eatableCellAfterTwoStepsPawnWhite.i][this.eatableCellAfterTwoStepsPawnWhite.j];
             this.board.board[this.eatableCellAfterTwoStepsPawnWhite.i][this.eatableCellAfterTwoStepsPawnWhite.j] = null;
-            this.eatenPieces.black.push(piece);
+            if (piece)
+                this.eatenPieces.black.push(piece);
         }
         if (((_e = this.board.board[fromCoord.i][fromCoord.j]) === null || _e === void 0 ? void 0 : _e.name) === 'P' &&
             fromCoord.i === 6 &&
@@ -142,13 +144,17 @@ class Game {
             const eatenPiece = this.board.board[toCoord.i][toCoord.j];
             const isEatenPieceBlack = this.isBlackPiece(eatenPiece);
             if (isEatenPieceBlack === true) {
-                this.eatenPieces.white.push(eatenPiece);
+                if (eatenPiece)
+                    this.eatenPieces.white.push(eatenPiece);
             }
             else if (isEatenPieceBlack === false) {
-                this.eatenPieces.black.push(eatenPiece);
+                if (eatenPiece)
+                    this.eatenPieces.black.push(eatenPiece);
             }
         }
         const piece = this.board.board[fromCoord.i][fromCoord.j];
+        if (piece)
+            piece.coord = toCoord;
         this.board.board[fromCoord.i][fromCoord.j] = null;
         this.board.board[toCoord.i][toCoord.j] = piece;
         if (isKingMoved) {
@@ -545,6 +551,9 @@ class Game {
             }
         }
         return board;
+    }
+    switchTurn() {
+        this.isBlackTurn = !this.isBlackTurn;
     }
 }
 exports.Game = Game;

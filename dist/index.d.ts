@@ -20,8 +20,8 @@ export declare class Game {
         white: Coord;
     };
     eatenPieces: {
-        black: any[];
-        white: any[];
+        black: (K | k | B | b | N | n | P | p | Q | q | R | r)[];
+        white: (K | k | B | b | N | n | P | p | Q | q | R | r)[];
     };
     players: {
         white: string;
@@ -37,9 +37,9 @@ export declare class Game {
     };
     constructor(isOnline?: boolean);
     isEmptyCell(coord: Coord): boolean;
-    isColorPieceWorthCurrPlayerColor(piece: any): boolean;
+    isColorPieceWorthCurrPlayerColor(piece: K | k | B | b | N | n | P | p | Q | q | R | r | null): boolean;
     isBlackPiece(piece: P | p | K | k | B | b | N | n | Q | q | R | r | null): boolean | undefined;
-    isOptionToCastling(pieceToCastling: any): boolean;
+    isOptionToCastling(pieceToCastling: K | k | B | b | N | n | P | p | Q | q | R | r): boolean;
     isPawnStepsEnd(piece: P | p): boolean;
     updateKingPos(toCoord: Coord, piece: P | p | K | k | B | b | N | n | Q | q | R | r | null): this;
     movePiece(toCellCoord: Coord): this | undefined;
@@ -60,4 +60,5 @@ export declare class Game {
     cloneDeep<T>(state: T): T;
     addPieceInsteadPawn(coordsToFill: Coord, pieceToAdd: P | p | K | k | B | b | N | n | Q | q | R | r): this;
     getBoard(): (string | null)[][];
+    switchTurn(): void;
 }

@@ -29,8 +29,8 @@ export class Game {
     white: { i: 7, j: 4 },
   }
   eatenPieces: {
-    black: any[]
-    white: any[]
+    black: (K | k | B | b | N | n | P | p | Q | q | R | r)[]
+    white: (K | k | B | b | N | n | P | p | Q | q | R | r)[]
   } = {
     black: [],
     white: [],
@@ -55,8 +55,10 @@ export class Game {
   isEmptyCell(coord: Coord) {
     return this.board.board[coord.i][coord.j] === null
   }
-  isColorPieceWorthCurrPlayerColor(piece: any) {
-    return this.isBlackTurn === this.isBlackPiece(piece.name)
+  isColorPieceWorthCurrPlayerColor(
+    piece: K | k | B | b | N | n | P | p | Q | q | R | r | null
+  ) {
+    return this.isBlackTurn === this.isBlackPiece(piece)
   }
   isBlackPiece(
     piece: P | p | K | k | B | b | N | n | Q | q | R | r | null
@@ -64,25 +66,27 @@ export class Game {
     switch (piece?.name) {
       case 'K': // KING_WHITE
       case 'B': // BISHOP_WHITE
-      case 'P': // PAWN_WHITE:
-      case 'Q': // QUEEN_WHITE:
-      case 'R': // ROOK_WHITE:
-      case 'N': // KNIGHT_WHITE:
+      case 'P': // PAWN_WHITE
+      case 'Q': // QUEEN_WHITE
+      case 'R': // ROOK_WHITE
+      case 'N': // KNIGHT_WHITE
         return false
 
-      case 'k': // KING_BLACK:
-      case 'b': // BISHOP_BLACK:
-      case 'p': //PAWN_BLACK:
-      case 'q': //  QUEEN_BLACK:
-      case 'r': // ROOK_BLACK:
-      case 'n': // KNIGHT_BLACK:
+      case 'k': // KING_BLACK
+      case 'b': // BISHOP_BLACK
+      case 'p': //PAWN_BLACK
+      case 'q': //  QUEEN_BLACK
+      case 'r': // ROOK_BLACK
+      case 'n': // KNIGHT_BLACK
         return true
 
       default:
         return undefined
     }
   }
-  isOptionToCastling(pieceToCastling: any) {
+  isOptionToCastling(
+    pieceToCastling: K | k | B | b | N | n | P | p | Q | q | R | r
+  ) {
     if (!this.selectedCellCoord) return false
 
     const currPiece =
@@ -153,7 +157,7 @@ export class Game {
       this.board.board[this.eatableCellAfterTwoStepsPawnBlack.i][
         this.eatableCellAfterTwoStepsPawnBlack.j
       ] = null
-      this.eatenPieces.white.push(piece)
+      if (piece) this.eatenPieces.white.push(piece)
     }
     if (
       this.isBlackTurn &&
@@ -168,7 +172,7 @@ export class Game {
       this.board.board[this.eatableCellAfterTwoStepsPawnWhite.i][
         this.eatableCellAfterTwoStepsPawnWhite.j
       ] = null
-      this.eatenPieces.black.push(piece)
+      if (piece) this.eatenPieces.black.push(piece)
     }
 
     if (
@@ -195,13 +199,14 @@ export class Game {
       const isEatenPieceBlack = this.isBlackPiece(eatenPiece)
 
       if (isEatenPieceBlack === true) {
-        this.eatenPieces.white.push(eatenPiece)
+        if (eatenPiece) this.eatenPieces.white.push(eatenPiece)
       } else if (isEatenPieceBlack === false) {
-        this.eatenPieces.black.push(eatenPiece)
+        if (eatenPiece) this.eatenPieces.black.push(eatenPiece)
       }
     }
 
     const piece = this.board.board[fromCoord.i][fromCoord.j]
+    if (piece) piece.coord = toCoord
     this.board.board[fromCoord.i][fromCoord.j] = null
     this.board.board[toCoord.i][toCoord.j] = piece
 
@@ -639,5 +644,8 @@ export class Game {
       }
     }
     return board
+  }
+  switchTurn() {
+    this.isBlackTurn = !this.isBlackTurn
   }
 }

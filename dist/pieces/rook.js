@@ -56,7 +56,8 @@ function getAllPossibleCoordsRook(self) {
                     const piece = board[nextCoord.i][nextCoord.j];
                     if (!self.game.isColorPieceWorthCurrPlayerColor(piece))
                         res.push(nextCoord); //last coord -> eatable
-                    else if (self.game.isColorPieceWorthCurrPlayerColor(piece) &&
+                    else if (piece &&
+                        self.game.isColorPieceWorthCurrPlayerColor(piece) &&
                         self.game.isOptionToCastling(piece)) {
                         let isCastlingLegal;
                         if (pieceCoord.j === 0) {

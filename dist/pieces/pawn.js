@@ -28,14 +28,15 @@ function getAllPossibleCoordsPawn(self) {
     const res = [];
     if (self) {
         const board = self.game.board.board;
-        const isWhite = self.game.isBlackPiece(self);
+        const isBlackPiece = self.game.isBlackPiece(self);
         const pieceCoord = self.coord;
         // Regular steps
-        let diff = isWhite ? -1 : 1;
+        let diff = isBlackPiece ? 1 : -1;
         let nextCoord = { i: pieceCoord.i + diff, j: pieceCoord.j };
         if (self.game.isEmptyCell(nextCoord)) {
             res.push(nextCoord);
-            if ((pieceCoord.i === 1 && !isWhite) || (pieceCoord.i === 6 && isWhite)) {
+            if ((pieceCoord.i === 1 && isBlackPiece) ||
+                (pieceCoord.i === 6 && !isBlackPiece)) {
                 diff *= 2;
                 nextCoord = { i: pieceCoord.i + diff, j: pieceCoord.j };
                 if (self.game.isEmptyCell(nextCoord))
@@ -43,7 +44,7 @@ function getAllPossibleCoordsPawn(self) {
             }
         }
         // eatable cells:
-        if (isWhite) {
+        if (!isBlackPiece) {
             const nextLeftCoord = { i: pieceCoord.i - 1, j: pieceCoord.j - 1 };
             const nextRightCoord = { i: pieceCoord.i - 1, j: pieceCoord.j + 1 };
             if (board[nextLeftCoord.i][nextLeftCoord.j] &&
@@ -55,7 +56,7 @@ function getAllPossibleCoordsPawn(self) {
                 res.push(nextRightCoord);
             }
         }
-        if (!isWhite) {
+        if (isBlackPiece) {
             const nextLeftCoord = { i: pieceCoord.i + 1, j: pieceCoord.j - 1 };
             const nextRightCoord = { i: pieceCoord.i + 1, j: pieceCoord.j + 1 };
             if (board[nextLeftCoord.i][nextLeftCoord.j] &&

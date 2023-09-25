@@ -76,6 +76,7 @@ export function getAllPossibleCoordsRook(
           if (!self.game.isColorPieceWorthCurrPlayerColor(piece))
             res.push(nextCoord) //last coord -> eatable
           else if (
+            piece &&
             self.game.isColorPieceWorthCurrPlayerColor(piece) &&
             self.game.isOptionToCastling(piece)
           ) {
