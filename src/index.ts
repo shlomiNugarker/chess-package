@@ -128,9 +128,26 @@ export class Game {
     }
     return this
   }
+  isValidMove(fromCoord: Coord, toCoord: Coord) {
+    console.log()
+    const fromPiece = this.board.board[fromCoord.i][fromCoord.j]
+    const possibleCoords = fromPiece?.getPossibleCoords()
+
+    return (
+      possibleCoords &&
+      possibleCoords?.some(
+        (coord) => coord.i === toCoord.i && coord.j === toCoord.j
+      )
+    )
+  }
   movePiece(toCellCoord: Coord) {
     const fromCoord = this.selectedCellCoord
     const toCoord = toCellCoord
+
+    if (fromCoord && !this.isValidMove(fromCoord, toCoord)) {
+      console.log('invalid move')
+      return
+    }
 
     const isKingMoved =
       (fromCoord && this.board.board[fromCoord.i][fromCoord.j]?.name === 'K') ||

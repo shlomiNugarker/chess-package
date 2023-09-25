@@ -73,7 +73,7 @@ export function getAllPossibleCoordsRook(
         } else {
           const piece = board[nextCoord.i][nextCoord.j]
 
-          if (!self.game.isColorPieceWorthCurrPlayerColor(piece))
+          if (piece && !self.game.isColorPieceWorthCurrPlayerColor(piece))
             res.push(nextCoord) //last coord -> eatable
           else if (
             piece &&
