@@ -33,7 +33,7 @@ export class b extends Piece {
 export function getAllPossibleCoordsBishop(
   self: P | p | K | k | B | b | N | n | Q | q | R | r | null
 ) {
-  const possibleCoords: { i: number; j: number }[] = []
+  const possibleCoords: Coord[] = []
   if (self) {
     const board = self.game.board.board
     const pieceCoord = self.coord
@@ -69,7 +69,7 @@ export function getAllPossibleCoordsBishop(
         } else {
           const piece = board[nextCoord.i][nextCoord.j]
           if (!self.game.isColorPieceWorthCurrPlayerColor(piece)) {
-            possibleCoords.push(nextCoord) // last coord -> eatable
+            possibleCoords.push({ ...nextCoord, isEatable: true }) // last coord -> eatable
           }
           break
         }

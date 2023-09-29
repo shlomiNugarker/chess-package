@@ -80,9 +80,10 @@ export function getAllPossibleCoordsQueen(
             !isAskForEatenCoords &&
             !self.game.isColorPieceWorthCurrPlayerColor(piece)
           ) {
-            res.push(nextCoord)
+            res.push({ ...nextCoord, isEatable: true })
           } else if (isAskForEatenCoords) {
-            res.push(nextCoord)
+            const eatablePiece = { ...nextCoord, isEatable: true }
+            res.push(eatablePiece)
           }
           break
         }

@@ -11,11 +11,12 @@ import { N, getAllPossibleCoordsKnight, n } from './pieces/knight'
 import { P, p } from './pieces/pawn'
 import { Q, getAllPossibleCoordsQueen, q } from './pieces/queen'
 import { R, getAllPossibleCoordsRook, r } from './pieces/rook'
+import _ from 'lodash'
 
 export class Game {
   isOnline: boolean
   board: Board
-  selectedCellCoord: Coord | null = null
+  private _selectedCellCoord: Coord | null = null
   isWhiteKingThreatened = false
   isBlackKingThreatened = false
   isBlackTurn = false
@@ -51,6 +52,12 @@ export class Game {
     this.isOnline = isOnline
     this.board = new Board(this)
     this.players = { white: 'userId_white', black: 'userId_black' }
+  }
+  set selectedCellCoord(coord: Coord | null) {
+    this._selectedCellCoord = coord
+  }
+  get selectedCellCoord() {
+    return this._selectedCellCoord
   }
   isEmptyCell(coord: Coord) {
     return this.board.board[coord.i][coord.j] === null
@@ -144,7 +151,16 @@ export class Game {
     const fromCoord = this.selectedCellCoord
     const toCoord = toCellCoord
 
+    const isNextStepLegal = this.isNextStepLegal(toCoord)
+
+    if (!isNextStepLegal) {
+      this._selectedCellCoord = null
+      console.log('ilegal step') // throw err?
+      return
+    }
+
     if (fromCoord && !this.isValidMove(fromCoord, toCoord)) {
+      this._selectedCellCoord = null
       console.log('invalid move')
       return
     }
@@ -255,9 +271,10 @@ export class Game {
   }
   checkIfKingThreatened(
     isFakeCheck = false,
+    board: any,
     coordToCheck?: { i: number; j: number }
   ) {
-    const board = this.board.board
+    // const board = this.board.board
     let isFoundThreatenPiece = false
 
     let kingPos = this.isBlackTurn
@@ -360,14 +377,14 @@ export class Game {
 
         // document.querySelector('.red')?.classList.remove('red')
       }
-      return { isThreatened: false }
+      return false
     }
 
     this.isBlackTurn
       ? (this.isBlackKingThreatened = true)
       : (this.isWhiteKingThreatened = true)
 
-    return { isThreatened: true }
+    return true
   }
   isCastleThreatened(fromCoord: Coord, toCoord: Coord) {
     let isCastleLegal: boolean = true
@@ -412,7 +429,7 @@ export class Game {
     }
 
     coordsToCheck.forEach((coord) => {
-      const { isThreatened } = this.checkIfKingThreatened(true, coord)
+      const isThreatened = this.checkIfKingThreatened(true, coord)
       if (isThreatened) {
         isCastleLegal = !isThreatened
       }
@@ -422,7 +439,6 @@ export class Game {
   }
   doCastling(toCoord: Coord) {
     const fromCoord = this.selectedCellCoord
-
     if (!fromCoord) return
 
     let kingPiece: P | p | K | k | B | b | N | n | Q | q | R | r | null = null
@@ -579,16 +595,17 @@ export class Game {
   }
   isNextStepLegal(toCoord: Coord) {
     const fromCoord = this.selectedCellCoord
+    if (!fromCoord) return false
 
-    if (!fromCoord) return { isMoveLegal: false }
+    const copyBoard = this.cloneDeep(this.board.board)
 
     const isKingMoved =
-      this.board.board[fromCoord.i][fromCoord.j]?.name === 'K' || // KING_WHITE
-      this.board.board[fromCoord.i][fromCoord.j]?.name === 'k' // KING_BLACK
+      copyBoard[fromCoord.i][fromCoord.j]?.name === 'K' || // KING_WHITE
+      copyBoard[fromCoord.i][fromCoord.j]?.name === 'k' // KING_BLACK
 
-    const piece = this.board.board[fromCoord.i][fromCoord.j]
-    this.board.board[fromCoord.i][fromCoord.j] = null // EMPTY
-    this.board.board[toCoord.i][toCoord.j] = piece
+    const piece = copyBoard[fromCoord.i][fromCoord.j]
+    copyBoard[fromCoord.i][fromCoord.j] = null // EMPTY
+    copyBoard[toCoord.i][toCoord.j] = piece
 
     if (isKingMoved) {
       // KING_WHITE
@@ -604,8 +621,8 @@ export class Game {
         this.isCastlingLegal.blackRightSide = false
       }
     }
-    const { isThreatened } = this.checkIfKingThreatened(true)
-    return { isMoveLegal: !isThreatened }
+    const isThreatened = this.checkIfKingThreatened(true, copyBoard)
+    return !isThreatened
   }
   isPlayerWin() {
     const { isBlackTurn } = this
@@ -630,7 +647,7 @@ export class Game {
             const copyState = this.cloneDeep(this)
             copyState.selectedCellCoord = { i, j }
 
-            const { isMoveLegal } = copyState.isNextStepLegal(coord)
+            const isMoveLegal = copyState.isNextStepLegal(coord)
 
             if (isMoveLegal) {
               isWin = false
@@ -643,7 +660,7 @@ export class Game {
     return isWin
   }
   cloneDeep<T>(state: T): T {
-    return JSON.parse(JSON.stringify(state))
+    return _.cloneDeep(state)
   }
   addPieceInsteadPawn(
     coordsToFill: Coord,

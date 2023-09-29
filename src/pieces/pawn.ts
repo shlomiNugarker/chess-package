@@ -63,8 +63,8 @@ export function getAllPossibleCoordsPawn(
 
     // eatable cells:
     if (!isBlackPiece) {
-      const nextLeftCoord = { i: pieceCoord.i - 1, j: pieceCoord.j - 1 }
-      const nextRightCoord = { i: pieceCoord.i - 1, j: pieceCoord.j + 1 }
+      const nextLeftCoord: Coord = { i: pieceCoord.i - 1, j: pieceCoord.j - 1 }
+      const nextRightCoord: Coord = { i: pieceCoord.i - 1, j: pieceCoord.j + 1 }
 
       if (
         board[nextLeftCoord.i][nextLeftCoord.j] &&
@@ -72,7 +72,7 @@ export function getAllPossibleCoordsPawn(
           board[nextLeftCoord.i][nextLeftCoord.j]
         )
       ) {
-        res.push(nextLeftCoord)
+        res.push({ ...nextLeftCoord, isEatable: true })
       }
       if (
         board[nextRightCoord.i][nextRightCoord.j] &&
@@ -80,7 +80,7 @@ export function getAllPossibleCoordsPawn(
           board[nextRightCoord.i][nextRightCoord.j]
         )
       ) {
-        res.push(nextRightCoord)
+        res.push({ ...nextRightCoord, isEatable: true })
       }
     }
     if (isBlackPiece) {
@@ -113,7 +113,7 @@ export function getAllPossibleCoordsPawn(
     ) {
       const eatableCell = { ...self.game.eatableCellAfterTwoStepsPawnWhite }
       eatableCell.i = eatableCell.i + 1
-      res.push(eatableCell)
+      res.push({ ...eatableCell, isEatable: true })
     } else if (
       self.game.eatableCellAfterTwoStepsPawnBlack &&
       !self.game.isBlackTurn &&
@@ -121,7 +121,7 @@ export function getAllPossibleCoordsPawn(
     ) {
       const eatableCell = { ...self.game.eatableCellAfterTwoStepsPawnBlack }
       eatableCell.i = eatableCell.i - 1
-      res.push(eatableCell)
+      res.push({ ...eatableCell, isEatable: true })
     }
   }
   return res

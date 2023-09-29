@@ -20,6 +20,11 @@
   "author": "Shlomi Nugarker",
   "license": "ISC",
   "devDependencies": {
+    "@types/lodash": "^4.14.199",
+    "@types/node": "^20.7.1",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }

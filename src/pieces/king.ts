@@ -67,7 +67,7 @@ export function getAllPossibleCoordsKing(
         } else {
           const piece = self.game.board.board[nextCoord.i][nextCoord.j]
           if (!self.game.isColorPieceWorthCurrPlayerColor(piece)) {
-            possibleCoords.push(nextCoord) // push eatable coord
+            possibleCoords.push({ ...nextCoord, isEatable: true }) // push eatable coord
           }
         }
       }
@@ -94,7 +94,7 @@ export function getAllPossibleCoordsKing(
               self.game.board.board[coordForCastle.i][coordForCastle.j]
             )
           ) {
-            possibleCoords.push(coordForCastle)
+            possibleCoords.push({ ...coordForCastle, isCastle: true })
           }
         }
       }

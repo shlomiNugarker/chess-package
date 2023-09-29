@@ -54,7 +54,7 @@ export function getAllPossibleCoordsRook(
         const diffI = i * possibleDir[k].i
         const diffJ = i * possibleDir[k].j
 
-        const nextCoord = {
+        const nextCoord: Coord = {
           i: pieceCoord.i + diffI,
           j: pieceCoord.j + diffJ,
         }
@@ -73,9 +73,10 @@ export function getAllPossibleCoordsRook(
         } else {
           const piece = board[nextCoord.i][nextCoord.j]
 
-          if (piece && !self.game.isColorPieceWorthCurrPlayerColor(piece))
-            res.push(nextCoord) //last coord -> eatable
-          else if (
+          if (piece && !self.game.isColorPieceWorthCurrPlayerColor(piece)) {
+            const eatablePiece = { ...nextCoord, isEatable: true }
+            res.push(eatablePiece)
+          } else if (
             piece &&
             self.game.isColorPieceWorthCurrPlayerColor(piece) &&
             self.game.isOptionToCastling(piece)

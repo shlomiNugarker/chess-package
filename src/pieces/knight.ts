@@ -35,7 +35,7 @@ export class n extends Piece {
 export function getAllPossibleCoordsKnight(
   self: P | p | K | k | B | b | N | n | Q | q | R | r | null
 ) {
-  const board = self?.game.board.board
+  const board = self?.game?.board?.board
   const pieceCoord = self?.coord
 
   const res: Coord[] = []
@@ -68,7 +68,7 @@ export function getAllPossibleCoordsKnight(
         else {
           const piece = board[nextCoord.i][nextCoord.j]
           if (!self?.game.isColorPieceWorthCurrPlayerColor(piece))
-            res.push(nextCoord) //-> eatable  coord
+            res.push({ ...nextCoord, isEatable: true }) //-> eatable  coord
         }
       }
     }
