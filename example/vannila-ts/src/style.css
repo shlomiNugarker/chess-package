@@ -1,0 +1,148 @@
+.board {
+  min-height: 100vh;
+  grid-area: board;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.board .turn .turn-black {
+  background-color: black;
+  color: white;
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px;
+}
+.board .turn .turn-black.playing {
+  box-shadow: inset 0px 0px 2px 5px #ad7f0b;
+}
+.board .turn .turn-white {
+  background-color: white;
+  color: black;
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px;
+}
+.board .turn .turn-white.playing {
+  box-shadow: inset 0px 0px 2px 5px #ad7f0b;
+}
+.board table {
+  border-spacing: 0;
+  color: black;
+  font-size: 44px;
+  display: flex;
+  flex-direction: column;
+  background-color: #646f40;
+}
+.eaten-pieces-white,
+.eaten-pieces-black {
+  min-height: 50px;
+  width: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.eaten-pieces-white span,
+.eaten-pieces-black span {
+  font-size: 34px;
+  /* width: 45px;
+  height: 45px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.board table tr {
+  display: flex;
+}
+.board table tr .td {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.board table tr .td.black.red {
+  background-color: #9b2d2d;
+}
+.board table tr .td.white.red {
+  background-color: #9b2d2d;
+}
+.board table tr .td.eatable {
+  border-radius: 50%;
+}
+.board table tr .td.castle {
+  border-radius: 50%;
+}
+.board table tr .td.white {
+  background-color: #f0d9b5;
+}
+.board table tr .td.black {
+  background-color: #b58863;
+}
+.board table tr .td.selected {
+  background-color: #646f40;
+}
+.board table tr .td.mark,
+.board table tr .td.fake-mark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.board table tr .td.mark:hover,
+.board table tr .td.fake-mark:hover {
+  background-color: rgb(132, 121, 78);
+}
+.board table tr .td.mark .span,
+.board table tr .td.fake-mark .span {
+  pointer-events: none;
+  background-color: #646f40;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen';
+  background-color: #262421;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  font-weight: normal;
+  padding: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+button * {
+  pointer-events: none;
+}

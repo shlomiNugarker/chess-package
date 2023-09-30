@@ -153,16 +153,22 @@ export class Game {
 
     const isNextStepLegal = this.isNextStepLegal(toCoord)
 
-    if (!isNextStepLegal) {
-      this._selectedCellCoord = null
-      console.log('ilegal step') // throw err?
-      return
-    }
+    const isPlayerThreatened =
+      (this.isBlackTurn && this.isBlackKingThreatened) ||
+      (!this.isBlackTurn && this.isWhiteKingThreatened)
 
     if (fromCoord && !this.isValidMove(fromCoord, toCoord)) {
       this._selectedCellCoord = null
-      console.log('invalid move')
-      return
+      throw new Error('Invalid move')
+    }
+
+    const kingPosition = this.isBlackTurn
+      ? this.kingPos.black
+      : this.kingPos.white
+
+    if (isPlayerThreatened && !isNextStepLegal) {
+      this._selectedCellCoord = null
+      throw new Error('Illegal step')
     }
 
     const isKingMoved =
@@ -271,10 +277,9 @@ export class Game {
   }
   checkIfKingThreatened(
     isFakeCheck = false,
-    board: any,
+    board: (K | k | B | b | N | n | P | p | Q | q | R | r | null)[][],
     coordToCheck?: { i: number; j: number }
   ) {
-    // const board = this.board.board
     let isFoundThreatenPiece = false
 
     let kingPos = this.isBlackTurn
@@ -429,7 +434,11 @@ export class Game {
     }
 
     coordsToCheck.forEach((coord) => {
-      const isThreatened = this.checkIfKingThreatened(true, coord)
+      const isThreatened = this.checkIfKingThreatened(
+        true,
+        this.board.board,
+        coord
+      )
       if (isThreatened) {
         isCastleLegal = !isThreatened
       }
@@ -441,11 +450,13 @@ export class Game {
     const fromCoord = this.selectedCellCoord
     if (!fromCoord) return
 
+    const toCoordPiece = this.board.board[toCoord.i][toCoord.j]
+    if (toCoordPiece && !this.isOptionToCastling(toCoordPiece)) return false
+
     let kingPiece: P | p | K | k | B | b | N | n | Q | q | R | r | null = null
     let newKingCoords: Coord | null = null
     let rookPiece: P | p | K | k | B | b | N | n | Q | q | R | r | null
     let rookCoords: Coord
-    let isCastleLegal: boolean = true
 
     // WHITE KING:
     if (
@@ -464,13 +475,15 @@ export class Game {
         rookCoords = toCoord
       }
 
-      if (rookCoords.j === 0 && !this.isCastlingLegal.whiteLeftSide) return
+      if (rookCoords.j === 0 && !this.isCastlingLegal.whiteLeftSide)
+        return false
 
-      if (rookCoords.j === 7 && !this.isCastlingLegal.whiteRightSide) return
+      if (rookCoords.j === 7 && !this.isCastlingLegal.whiteRightSide)
+        return false
 
-      if (!this.isCastlingLegal.whiteKing) return
+      if (!this.isCastlingLegal.whiteKing) return false
 
-      if (this.isWhiteKingThreatened) return
+      if (this.isWhiteKingThreatened) return false
 
       this.board.board[fromCoord.i][fromCoord.j] = null
       this.board.board[toCoord.i][toCoord.j] = null
@@ -478,8 +491,7 @@ export class Game {
       if (fromCoord.j === 0 && toCoord.j === 4) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[7][3] = rookPiece
         this.board.board[7][2] = kingPiece
@@ -488,8 +500,7 @@ export class Game {
       } else if (fromCoord.j === 7 && toCoord.j === 4) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[7][5] = rookPiece
         this.board.board[7][6] = kingPiece
@@ -498,8 +509,7 @@ export class Game {
       } else if (fromCoord.j === 4 && toCoord.j === 7) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[7][5] = rookPiece
         this.board.board[7][6] = kingPiece
@@ -508,8 +518,7 @@ export class Game {
       } else if (fromCoord.j === 4 && toCoord.j === 0) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[7][3] = rookPiece
         this.board.board[7][2] = kingPiece
@@ -536,13 +545,15 @@ export class Game {
         rookCoords = toCoord
       }
 
-      if (rookCoords.j === 0 && !this.isCastlingLegal.blackLeftSide) return
+      if (rookCoords.j === 0 && !this.isCastlingLegal.blackLeftSide)
+        return false
 
-      if (rookCoords.j === 7 && !this.isCastlingLegal.blackRightSide) return
+      if (rookCoords.j === 7 && !this.isCastlingLegal.blackRightSide)
+        return false
 
-      if (!this.isCastlingLegal.blackKing) return
+      if (!this.isCastlingLegal.blackKing) return false
 
-      if (this.isBlackKingThreatened) return
+      if (this.isBlackKingThreatened) return false
 
       this.board.board[fromCoord.i][fromCoord.j] = null // EMPTY
       this.board.board[toCoord.i][toCoord.j] = null // EMPTY
@@ -550,8 +561,7 @@ export class Game {
       if (fromCoord.j === 0 && toCoord.j === 4) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[0][3] = rookPiece
         this.board.board[0][2] = kingPiece
@@ -560,8 +570,7 @@ export class Game {
       } else if (fromCoord.j === 7 && toCoord.j === 4) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[0][5] = rookPiece
         this.board.board[0][6] = kingPiece
@@ -570,8 +579,7 @@ export class Game {
       } else if (fromCoord.j === 4 && toCoord.j === 7) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[0][5] = rookPiece
         this.board.board[0][6] = kingPiece
@@ -580,8 +588,7 @@ export class Game {
       } else if (fromCoord.j === 4 && toCoord.j === 0) {
         const isThreatened = this.isCastleThreatened(fromCoord, toCoord)
         if (!isThreatened) {
-          isCastleLegal = false
-          return { isCastleLegal }
+          return false
         }
         this.board.board[0][3] = rookPiece
         this.board.board[0][2] = kingPiece
@@ -591,7 +598,7 @@ export class Game {
       this.isCastlingLegal.blackKing = false
     }
 
-    return { isCastleLegal }
+    return true
   }
   isNextStepLegal(toCoord: Coord) {
     const fromCoord = this.selectedCellCoord

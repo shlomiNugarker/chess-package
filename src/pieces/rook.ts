@@ -37,7 +37,7 @@ export class r extends Piece {
 export function getAllPossibleCoordsRook(
   self: P | p | K | k | B | b | N | n | Q | q | R | r | null
 ) {
-  const res: { i: number; j: number }[] = []
+  const res: Coord[] = []
   if (self) {
     const board = self.game.board.board
     const pieceCoord = self.coord
@@ -99,7 +99,9 @@ export function getAllPossibleCoordsRook(
               ? (isKingMoveLegal = self.game.isCastlingLegal.blackKing)
               : (isKingMoveLegal = self.game.isCastlingLegal.whiteKing)
 
-            isCastlingLegal && isKingMoveLegal && res.push(nextCoord)
+            isCastlingLegal &&
+              isKingMoveLegal &&
+              res.push({ ...nextCoord, isCastle: true })
           }
           break
         }

@@ -39,7 +39,7 @@ export class Board {
     // WHITE
     this.board[7][0] = new R(this.game, { i: 7, j: 0 })
     this.board[7][7] = new R(this.game, { i: 7, j: 7 })
-    this.board[7][1] = new N(this.game, { i: 7, j: 6 })
+    this.board[7][1] = new N(this.game, { i: 7, j: 1 })
     this.board[7][6] = new N(this.game, { i: 7, j: 6 })
     this.board[7][2] = new B(this.game, { i: 7, j: 2 })
     this.board[7][5] = new B(this.game, { i: 7, j: 5 })
