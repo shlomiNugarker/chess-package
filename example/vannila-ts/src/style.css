@@ -5,30 +5,7 @@
   justify-content: center;
   align-items: center;
 }
-.board .turn .turn-black {
-  background-color: black;
-  color: white;
-  height: 240px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 7px;
-}
-.board .turn .turn-black.playing {
-  box-shadow: inset 0px 0px 2px 5px #ad7f0b;
-}
-.board .turn .turn-white {
-  background-color: white;
-  color: black;
-  height: 240px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 7px;
-}
-.board .turn .turn-white.playing {
-  box-shadow: inset 0px 0px 2px 5px #ad7f0b;
-}
+
 .board table {
   border-spacing: 0;
   color: black;

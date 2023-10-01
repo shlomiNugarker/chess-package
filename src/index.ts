@@ -159,7 +159,7 @@ export class Game {
 
     if (fromCoord && !this.isValidMove(fromCoord, toCoord)) {
       this._selectedCellCoord = null
-      throw new Error('Invalid move')
+      return
     }
 
     const kingPosition = this.isBlackTurn
@@ -168,7 +168,7 @@ export class Game {
 
     if (isPlayerThreatened && !isNextStepLegal) {
       this._selectedCellCoord = null
-      throw new Error('Illegal step')
+      return
     }
 
     const isKingMoved =
@@ -282,19 +282,21 @@ export class Game {
   ) {
     let isFoundThreatenPiece = false
 
-    let kingPos = this.isBlackTurn
+    let kingPiece = this.isBlackTurn
       ? board[this.kingPos.black.i][this.kingPos.black.j]
       : board[this.kingPos.white.i][this.kingPos.white.j]
 
     // this act is for check another piece as a king coords (for example when castling..)
-    if (coordToCheck) kingPos = board[coordToCheck.i][coordToCheck.j]
+    if (coordToCheck) kingPiece = board[coordToCheck.i][coordToCheck.j]
 
-    const knightOpts = getAllPossibleCoordsKnight(kingPos)
-    const kingOpts = getAllPossibleCoordsKing(kingPos)
-    const queenOpts = getAllPossibleCoordsQueen(kingPos, true)
-    const pawnOpts = getAllPossibleKingCoordsToGetEatenPawn(kingPos)
-    const bishopOpts = getAllPossibleCoordsBishop(kingPos)
-    const rookOpts = getAllPossibleCoordsRook(kingPos)
+    const knightOpts = getAllPossibleCoordsKnight(kingPiece)
+    const kingOpts = getAllPossibleCoordsKing(kingPiece)
+    const queenOpts = getAllPossibleCoordsQueen(kingPiece, true)
+    const pawnOpts = getAllPossibleKingCoordsToGetEatenPawn(kingPiece)
+    const bishopOpts = getAllPossibleCoordsBishop(kingPiece)
+    const rookOpts = getAllPossibleCoordsRook(kingPiece)
+
+    console.log({ queenOpts })
 
     !isFoundThreatenPiece &&
       queenOpts.forEach((coord) => {
@@ -305,7 +307,12 @@ export class Game {
 
         if (pieceToCheck && pieceToCheck.name === threatenPiece) {
           isFoundThreatenPiece = true
-          // !isFakeCheck && paintKingCellToRed(kingPos)
+          !isFakeCheck &&
+            document
+              .querySelector(
+                `#cell-${kingPiece?.coord.i}-${kingPiece?.coord.j}`
+              )
+              ?.classList.add('red')
         }
       })
 
@@ -318,7 +325,12 @@ export class Game {
 
         if (pieceToCheck && pieceToCheck.name === threatenPiece) {
           isFoundThreatenPiece = true
-          // !isFakeCheck && paintKingCellToRed(kingPos) // !!
+          !isFakeCheck &&
+            document
+              .querySelector(
+                `#cell-${kingPiece?.coord.i}-${kingPiece?.coord.j}`
+              )
+              ?.classList.add('red')
         }
       })
 
@@ -331,7 +343,12 @@ export class Game {
 
         if (pieceToCheck && pieceToCheck.name === threatenPiece) {
           isFoundThreatenPiece = true
-          // !isFakeCheck && paintKingCellToRed(kingPos) // !!
+          !isFakeCheck &&
+            document
+              .querySelector(
+                `#cell-${kingPiece?.coord.i}-${kingPiece?.coord.j}`
+              )
+              ?.classList.add('red')
         }
       })
 
@@ -344,7 +361,12 @@ export class Game {
 
         if (pieceToCheck && pieceToCheck.name === threatenPiece) {
           isFoundThreatenPiece = true
-          // !isFakeCheck && paintKingCellToRed(kingPos)
+          !isFakeCheck &&
+            document
+              .querySelector(
+                `#cell-${kingPiece?.coord.i}-${kingPiece?.coord.j}`
+              )
+              ?.classList.add('red')
         }
       })
 
@@ -357,7 +379,12 @@ export class Game {
 
         if (pieceToCheck && pieceToCheck.name === threatenPiece) {
           isFoundThreatenPiece = true
-          // !isFakeCheck && paintKingCellToRed(kingPos)
+          !isFakeCheck &&
+            document
+              .querySelector(
+                `#cell-${kingPiece?.coord.i}-${kingPiece?.coord.j}`
+              )
+              ?.classList.add('red')
         }
       })
 
@@ -370,7 +397,12 @@ export class Game {
 
         if (pieceToCheck && pieceToCheck.name === threatenPiece) {
           isFoundThreatenPiece = true
-          // !isFakeCheck && paintKingCellToRed(kingPos)
+          !isFakeCheck &&
+            document
+              .querySelector(
+                `#cell-${kingPiece?.coord.i}-${kingPiece?.coord.j}`
+              )
+              ?.classList.add('red')
         }
       })
 
@@ -629,6 +661,7 @@ export class Game {
       }
     }
     const isThreatened = this.checkIfKingThreatened(true, copyBoard)
+
     return !isThreatened
   }
   isPlayerWin() {

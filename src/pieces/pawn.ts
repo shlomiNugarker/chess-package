@@ -46,7 +46,7 @@ export function getAllPossibleCoordsPawn(
     // Regular steps
     let diff = isBlackPiece ? 1 : -1
 
-    let nextCoord = { i: pieceCoord.i + diff, j: pieceCoord.j }
+    let nextCoord: Coord = { i: pieceCoord.i + diff, j: pieceCoord.j }
 
     if (self.game.isEmptyCell(nextCoord)) {
       res.push(nextCoord)
@@ -93,7 +93,7 @@ export function getAllPossibleCoordsPawn(
           board[nextLeftCoord.i][nextLeftCoord.j]
         )
       ) {
-        res.push(nextLeftCoord)
+        res.push({ ...nextLeftCoord, isEatable: true })
       }
       if (
         board[nextRightCoord.i][nextRightCoord.j] &&
@@ -101,7 +101,7 @@ export function getAllPossibleCoordsPawn(
           board[nextRightCoord.i][nextRightCoord.j]
         )
       ) {
-        res.push(nextRightCoord)
+        res.push({ ...nextRightCoord, isEatable: true })
       }
     }
 
