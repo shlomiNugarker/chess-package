@@ -38,7 +38,7 @@ export function getAllPossibleCoordsKnight(
   const board = self?.game?.board?.board
   const pieceCoord = self?.coord
 
-  const res: Coord[] = []
+  const possibleCoords: Coord[] = []
 
   const possibleSteps = [
     { i: -2, j: -1 },
@@ -64,14 +64,16 @@ export function getAllPossibleCoordsKnight(
         nextCoord.j < 8 &&
         board
       ) {
-        if (self?.game.isEmptyCell(nextCoord)) res.push(nextCoord)
+        if (self?.game.isEmptyCell(nextCoord)) possibleCoords.push(nextCoord)
         else {
           const piece = board[nextCoord.i][nextCoord.j]
           if (!self?.game.isColorPieceWorthCurrPlayerColor(piece))
-            res.push({ ...nextCoord, isEatable: true }) //-> eatable  coord
+            possibleCoords.push({ ...nextCoord, isEatable: true }) //-> eatable  coord
         }
       }
     }
   }
-  return res
+
+  if (self) self.game.currMarksSquares = possibleCoords
+  return possibleCoords
 }

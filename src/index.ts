@@ -14,6 +14,7 @@ import { R, getAllPossibleCoordsRook, r } from './pieces/rook'
 import _ from 'lodash'
 
 export class Game {
+  currMarksSquares: Coord[] = []
   isOnline: boolean
   board: Board
   private _selectedCellCoord: Coord | null = null
@@ -721,5 +722,87 @@ export class Game {
   }
   switchTurn() {
     this.isBlackTurn = !this.isBlackTurn
+  }
+  cleanBoard() {
+    console.log('cleanBoard')
+    this.currMarksSquares = []
+    this.selectedCellCoord = null
+  }
+  handleCellClick(ev: MouseEvent, i: number, j: number) {
+    const clickedCoordCell = { i, j }
+    const board = this.board.board
+    const piece = board[i][j]
+    const selectedCellCoord = this.selectedCellCoord
+
+    if (ev.target instanceof Element) {
+      const isSquareSelected =
+        this.selectedCellCoord?.i === i && this.selectedCellCoord.j === j
+
+      const isSquareMarked = this.currMarksSquares.some(
+        (coord) => coord.i === i && coord.j === j
+      )
+      console.log({ isSquareMarked })
+
+      const isSquareEatable = (ev.target as Element).classList.contains(
+        'eatable'
+      )
+      const isSquareCastling = (ev.target as Element).classList.contains(
+        'castle'
+      )
+      const target = ev.target
+
+      if (isSquareEatable && selectedCellCoord) {
+        // HANDLE EATABLE MOVE:
+        console.log('HANDLE EATABLE MOVE:')
+        this.movePiece(clickedCoordCell)
+        // renderBoard(this.getBoard())
+
+        if (
+          (board[i][j] instanceof P || board[i][j] instanceof p) &&
+          this.isPawnStepsEnd(board[i][j] as p | P)
+        ) {
+          console.log('isPawnStepsEnd!!')
+          // cleanBoard()
+        }
+      } else if (isSquareCastling && selectedCellCoord) {
+        // HANDLE CASTLING
+        console.log('HANDLE CASTLING')
+        this.doCastling(clickedCoordCell)
+        // renderBoard(this.getBoard())
+        // cleanBoard()
+      } else if (
+        piece &&
+        piece !== null &&
+        !this.isColorPieceWorthCurrPlayerColor(piece)
+      ) {
+        return
+      } else if (isSquareSelected) {
+        // UNSELECT:
+        console.log('UNSELECT')
+        this.selectedCellCoord = null
+        this.cleanBoard()
+
+        // cleanBoard()
+      } else if (isSquareMarked && selectedCellCoord) {
+        // HANDLE STEP MOVE:
+        console.log('HANDLE STEP MOVE:')
+
+        this.movePiece(clickedCoordCell)
+
+        // renderBoard(this.getBoard())
+      } else {
+        if (piece) {
+          // HANDLE PIECE SELECTION:
+          console.log('HANDLE PIECE SELECTION')
+          // cleanBoard()
+          const piece = this.board.board[i][j]
+          this.selectedCellCoord = { i, j }
+          ;(target as Element).classList.add('selected')
+          const possibleCoords = piece?.getPossibleCoords()
+          // if (possibleCoords) markCells(possibleCoords)
+        }
+      }
+    }
+    // console.table(this.getBoard())
   }
 }

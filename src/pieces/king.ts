@@ -100,13 +100,15 @@ export function getAllPossibleCoordsKing(
       }
     }
   }
+
+  if (self) self.game.currMarksSquares = possibleCoords
   return possibleCoords
 }
 
 export function getAllPossibleKingCoordsToGetEatenPawn(
   self: P | p | K | k | B | b | N | n | Q | q | R | r | null
 ) {
-  const res: { i: number; j: number }[] = []
+  const possibleCoords: Coord[] = []
   if (self) {
     const { isBlackTurn } = self.game
     let kingCoord = self.coord
@@ -129,10 +131,11 @@ export function getAllPossibleKingCoordsToGetEatenPawn(
         possibleSteps[k].j >= 0 &&
         possibleSteps[k].j < 8
       ) {
-        res.push(possibleSteps[k])
+        possibleCoords.push(possibleSteps[k])
       }
     }
   }
 
-  return res
+  if (self) self.game.currMarksSquares = possibleCoords
+  return possibleCoords
 }

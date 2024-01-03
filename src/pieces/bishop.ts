@@ -77,5 +77,6 @@ export function getAllPossibleCoordsBishop(
     }
   }
 
+  if (self) self.game.currMarksSquares = possibleCoords
   return possibleCoords
 }

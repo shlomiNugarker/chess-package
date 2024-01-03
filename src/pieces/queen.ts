@@ -37,7 +37,7 @@ export function getAllPossibleCoordsQueen(
   self: P | p | K | k | B | b | N | n | Q | q | R | r | null,
   isAskForEatenCoords: boolean = false
 ) {
-  const res: Coord[] = []
+  const possibleCoords: Coord[] = []
   if (self) {
     const board = self.game.board.board
     const pieceCoord = self.coord
@@ -73,22 +73,24 @@ export function getAllPossibleCoordsQueen(
           break
         }
         if (self.game.isEmptyCell(nextCoord)) {
-          res.push(nextCoord)
+          possibleCoords.push(nextCoord)
         } else {
           const piece = board[nextCoord.i][nextCoord.j]
           if (
             !isAskForEatenCoords &&
             !self.game.isColorPieceWorthCurrPlayerColor(piece)
           ) {
-            res.push({ ...nextCoord, isEatable: true })
+            possibleCoords.push({ ...nextCoord, isEatable: true })
           } else if (isAskForEatenCoords) {
             const eatablePiece = { ...nextCoord, isEatable: true }
-            res.push(eatablePiece)
+            possibleCoords.push(eatablePiece)
           }
           break
         }
       }
     }
   }
-  return res
+
+  if (self) self.game.currMarksSquares = possibleCoords
+  return possibleCoords
 }

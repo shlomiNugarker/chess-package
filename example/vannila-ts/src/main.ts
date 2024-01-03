@@ -1,7 +1,7 @@
 import './style.css'
 import * as chessService from '../../../src/index'
 import { renderBoard } from './controller/renderBoard'
-import { handleCellClick } from './controller/handleCellClick'
+// import { handleCellClick } from './controller/handleCellClick'
 
 export const game = new chessService.Game()
 
@@ -17,6 +17,7 @@ function addEventListeners() {
   document
     .querySelector('.switch-turn')
     ?.addEventListener('click', () => game.switchTurn())
+
   // board click:
   const elMat = document.querySelector('table')
   elMat?.addEventListener('click', function (event) {
@@ -26,7 +27,7 @@ function addEventListeners() {
       const i = parseInt(cellIdParts[1])
       const j = parseInt(cellIdParts[2])
 
-      handleCellClick(event, i, j)
+      game.handleCellClick(event, i, j)
     }
   })
 }

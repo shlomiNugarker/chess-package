@@ -37,7 +37,7 @@ export class r extends Piece {
 export function getAllPossibleCoordsRook(
   self: P | p | K | k | B | b | N | n | Q | q | R | r | null
 ) {
-  const res: Coord[] = []
+  const possibleCoords: Coord[] = []
   if (self) {
     const board = self.game.board.board
     const pieceCoord = self.coord
@@ -69,13 +69,13 @@ export function getAllPossibleCoordsRook(
         }
 
         if (self.game.isEmptyCell(nextCoord)) {
-          res.push(nextCoord)
+          possibleCoords.push(nextCoord)
         } else {
           const piece = board[nextCoord.i][nextCoord.j]
 
           if (piece && !self.game.isColorPieceWorthCurrPlayerColor(piece)) {
             const eatablePiece = { ...nextCoord, isEatable: true }
-            res.push(eatablePiece)
+            possibleCoords.push(eatablePiece)
           } else if (
             piece &&
             self.game.isColorPieceWorthCurrPlayerColor(piece) &&
@@ -101,12 +101,14 @@ export function getAllPossibleCoordsRook(
 
             isCastlingLegal &&
               isKingMoveLegal &&
-              res.push({ ...nextCoord, isCastle: true })
+              possibleCoords.push({ ...nextCoord, isCastle: true })
           }
           break
         }
       }
     }
   }
-  return res
+
+  if (self) self.game.currMarksSquares = possibleCoords
+  return possibleCoords
 }
